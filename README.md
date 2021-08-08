@@ -6,14 +6,14 @@
 
 This is a system for managing exam judging and analyzing.
 
-Used for practicing development skills.
+Used for practicing software-engineering skills.
 
 Skill Points:
 
-+ React.js
-+ Next.js
-+ RESTful API
-+ Mysql
++ Next.js (React)
+  + https://www.nextjs.cn/
++ FastAPI
+  + https://fastapi.tiangolo.com/tutorial/sql-databases/
 
 ## Accounts
 

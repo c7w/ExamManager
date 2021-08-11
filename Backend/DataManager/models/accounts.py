@@ -1,5 +1,7 @@
+from datetime import datetime, timedelta
+from sqlalchemy.sql.functions import user
+from sqlalchemy.sql.sqltypes import DateTime
 from DataManager.utils.Password import sha256
-from DataManager.schemas import CreateUser
 from sqlalchemy import Column, String, Integer, Boolean, schema
 from sqlalchemy.orm.session import Session
 from DataManager.database import engine
@@ -32,25 +34,31 @@ class Group(Base):
 class SessionPool(Base):
     __tablename__ = "SessionPool"
     id = Column(Integer, primary_key=True, autoincrement=True, index=True)
-    sessionId = Column(String)
+    sessionId = Column(String, unique=True)
+    expireAt = Column(DateTime, default=datetime.now()+timedelta(days=2))
     user_id = Column(Integer, ForeignKey("account_users.id", ondelete="CASCADE"))
     user = relationship("User")
     
 Base.metadata.create_all(bind=engine)
-print("Accounts Created")
 
+# User
 def get_user(db: Session, user_id: int):
     return db.query(User).filter(User.id == user_id).first()
 
-def create_user(db: Session, data: CreateUser):
-    password = sha256(data.password)
-    db_user = User(id=data.id, username=data.username, password = password)
-    db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
-    return db_user
+def create_user(db: Session, user_id: int, password: str, username: str = ""):
+    if username == "":
+        username = str(user_id)
+    password = sha256(password)
+    db_user = User(id=user_id, username=username, password = password)
+    try:
+        db.add(db_user)
+        db.commit()
+        db.refresh(db_user)
+        return db_user
+    except:
+        return None
 
-def login_user(db: Session, user_id: int, password: str):
+def check_user(db: Session, user_id: int, password: str):
     password = sha256(password)
     db_user = get_user(db, user_id)
     if db_user:
@@ -58,3 +66,45 @@ def login_user(db: Session, user_id: int, password: str):
             return db_user
         return None
     return None
+
+# Group
+
+# SessionPool
+def check_session(db: Session, sessionId: str):
+    
+    # First delete all the sessions that were expired.
+    db.query(SessionPool).filter(SessionPool.expireAt < datetime.now()).delete()
+    db.commit()
+    # Then return the relevant session record.
+    print(db.query(SessionPool).all())
+    session =  db.query(SessionPool).filter(SessionPool.sessionId == sessionId).first()
+    if session and session.user.is_active:
+        # return user
+        return {'status': 'ok', 'user_id': session.user.id, 'username': session.user.username, 'prompts': 4} # TODO: prompt count
+    else:
+        return {'status': 'failed'}
+def create_session(db: Session, sessionId: str, user_id: int):
+    new_session = SessionPool(sessionId=sessionId, user_id=user_id)
+    db.add(new_session)
+    db.commit()
+    db.refresh(new_session)
+    return new_session
+
+def auth_user(db: Session, sessionId: str, user_id: int, password: str):
+    user = check_user(db, user_id, password)
+    if user:
+        return {'status': 'ok', 'session': create_session(db, sessionId, user_id)}
+    else:
+        return {'status': 'failed'}
+
+
+def register_user(db: Session, sessionId: str, user_id: int, password: str, username: str):
+    user = create_user(db, user_id, password, username)
+    if user:
+        return {'status': 'ok', 'user': user}
+    return {'status': 'failed'}
+
+def expire_session(db: Session, sessionId: str):
+    db.query(SessionPool).filter(SessionPool.sessionId == sessionId).delete()
+    db.commit()
+    return {'status': 'ok'}

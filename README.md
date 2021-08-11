@@ -10,26 +10,10 @@ Used for practicing software-engineering skills.
 
 Skill Points:
 
-+ Next.js (React)
++ [Frontend] Next.js (React)
   + https://www.nextjs.cn/
-+ FastAPI
++ [Backend] FastAPI
   + https://fastapi.tiangolo.com/tutorial/sql-databases/
-
-## Accounts
-
-+ User registration and import
-+ User login
-+ User group
-
-## Exams
-
-**States**
-
-+ Collecting
-+ Judging
-+ Published
-
-**Answer sheets...(Excel Process)**
 
 ## Database
 
@@ -61,4 +45,6 @@ Else jump to `/dashboard`
 
 
 + `/dashboard`
+
+## Layout
 

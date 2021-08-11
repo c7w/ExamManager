@@ -1,0 +1,39 @@
+@import 'antd/dist/antd.css';
+
+.site-layout-content {
+  min-height: 555px;
+  padding: 24px;
+  background: #fff;
+  /* opacity: 1; */
+}
+#components-layout-demo-top .logo {
+  float: left;
+  width: 120px;
+  height: 31px;
+  margin: 16px 24px 16px 0;
+  background: rgba(255, 255, 255, 0.3);
+}
+.ant-row-rtl #components-layout-demo-top .logo {
+  float: right;
+  margin: 16px 0 16px 24px;
+}
+
+.ant-layout-header {
+    background-color: rgba(25, 118, 210, 1);
+}
+
+.Navbar div *{
+    vertical-align: middle;
+    margin: 0;
+    color: #fff;
+}
+
+.NavbarIcon {
+    font-size: 30px;
+}
+
+.NavbarLoginMenu li span{
+    font-size: 20px;
+    padding: 5px;
+    text-align: center;
+}

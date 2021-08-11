@@ -4,7 +4,9 @@ import Layout from "../components/layout";
 const Login = (): ReactElement => {
   return (
     <>
-      <Layout></Layout>
+      <Layout>
+              
+      </Layout>
     </>
   );
 };

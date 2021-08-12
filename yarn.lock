@@ -205,6 +205,11 @@
   resolved "https://registry.nlark.com/@rushstack/eslint-patch/download/@rushstack/eslint-patch-1.0.6.tgz#023d72a5c4531b4ce204528971700a78a85a0c50"
   integrity sha1-Aj1ypcRTG0ziBFKJcXAKeKhaDFA=
 
+"@types/crypto-js@^4.0.2":
+  version "4.0.2"
+  resolved "https://registry.nlark.com/@types/crypto-js/download/@types/crypto-js-4.0.2.tgz#4524325a175bf819fec6e42560c389ce1fb92c97"
+  integrity sha1-RSQyWhdb+Bn+xuQlYMOJzh+5LJc=
+
 "@types/node@*":
   version "16.4.13"
   resolved "https://registry.nlark.com/@types/node/download/@types/node-16.4.13.tgz#7dfd9c14661edc65cccd43a29eb454174642370d"
@@ -874,6 +879,11 @@ crypto-browserify@3.12.0, crypto-browserify@^3.11.0:
     public-encrypt "^4.0.0"
     randombytes "^2.0.0"
     randomfill "^1.0.3"
+
+crypto-js@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.nlark.com/crypto-js/download/crypto-js-4.1.1.tgz#9e485bcf03521041bd85844786b83fb7619736cf"
+  integrity sha1-nkhbzwNSEEG9hYRHhrg/t2GXNs8=
 
 css.escape@1.5.1:
   version "1.5.1"
@@ -3547,6 +3557,11 @@ type-fest@^0.7.1:
   version "0.7.1"
   resolved "https://registry.nlark.com/type-fest/download/type-fest-0.7.1.tgz#8dda65feaf03ed78f0a3f9678f1869147f7c5c48"
   integrity sha1-jdpl/q8D7Xjwo/lnjxhpFH98XEg=
+
+typescript-eslint@^0.0.1-alpha.0:
+  version "0.0.1-alpha.0"
+  resolved "https://registry.nlark.com/typescript-eslint/download/typescript-eslint-0.0.1-alpha.0.tgz#285d68a4e96588295cd436278801bcb6a6b916c1"
+  integrity sha1-KF1opOlliClc1DYniAG8tqa5FsE=
 
 typescript@4.3.5:
   version "4.3.5"

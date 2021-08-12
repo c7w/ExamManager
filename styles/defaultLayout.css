@@ -3,7 +3,8 @@
 .site-layout-content {
   min-height: 555px;
   padding: 24px;
-  background: #fff;
+  background: rgba(255,255,255,0.8);
+  border-radius: 2rem;
   /* opacity: 1; */
 }
 #components-layout-demo-top .logo {

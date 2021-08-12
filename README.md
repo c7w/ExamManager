@@ -46,5 +46,6 @@ Else jump to `/dashboard`
 
 + `/dashboard`
 
-## Layout
+## Todo
 
++ Login Animation

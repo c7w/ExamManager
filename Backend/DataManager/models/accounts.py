@@ -22,6 +22,9 @@ class User(Base):
     password = Column(String)
     is_active = Column(Boolean, default=True)
     groups = relationship("UserGroupAssociation")
+    
+    def toDict(self):
+        return {'id': self.id, 'username': self.username, 'groups': self.groups, 'prompts': 4} # TODO: prompts
 
 
 class Group(Base):
@@ -76,13 +79,13 @@ def check_session(db: Session, sessionId: str):
     db.query(SessionPool).filter(SessionPool.expireAt < datetime.now()).delete()
     db.commit()
     # Then return the relevant session record.
-    print(db.query(SessionPool).all())
     session =  db.query(SessionPool).filter(SessionPool.sessionId == sessionId).first()
     if session and session.user.is_active:
         # return user
-        return {'status': 'ok', 'user_id': session.user.id, 'username': session.user.username, 'prompts': 4} # TODO: prompt count
+        return {'status': 'ok', 'user': session.user.toDict()}
     else:
         return {'status': 'failed'}
+
 def create_session(db: Session, sessionId: str, user_id: int):
     new_session = SessionPool(sessionId=sessionId, user_id=user_id)
     db.add(new_session)

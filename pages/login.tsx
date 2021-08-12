@@ -12,10 +12,23 @@ const Login = (): ReactElement => {
     const [uid, setUid] = useState<string>('');
     const [pass, setPass] = useState<string>('');
     const sessionId = useRef<String>('');
+    const [user, setUser] = useState<Object>({});
 
     const getSessionId = (sid: String) => {
         sessionId.current = sid;
     };
+
+    const getUser = (user: Object) => {
+        setUser(user);
+    };
+
+    useEffect(() => {
+        if (user.hasOwnProperty('username')) {
+            setLogin(<CenteredResult icon={<SmileOutlined/>}
+                title="You have already logged in!" />);
+            setTimeout(() => window.location.href = '/dashboard', 2000);
+        }
+    }, [user]);
 
     const submit = (e: React.MouseEvent<HTMLInputElement>) => {
         const uid = ((document.getElementById('uid')) as HTMLInputElement).value;
@@ -120,7 +133,8 @@ const Login = (): ReactElement => {
 
     return (
         <>
-            <Layout getSessionId={ getSessionId }>
+            <Layout getSessionId={ getSessionId }
+                getUser={getUser}>
                 <div>
                     {login}
                 </div>

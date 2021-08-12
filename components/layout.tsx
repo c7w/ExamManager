@@ -1,6 +1,6 @@
 import { Menu, Typography, Layout, Row, Col, Badge, Button, Dropdown } from 'antd';
 import React, { ReactElement, useEffect, useState } from 'react';
-import { MenuOutlined, MailOutlined, LoginOutlined, LogoutOutlined, LoadingOutlined, UserOutlined, UserAddOutlined, WarningOutlined } from '@ant-design/icons';
+import { HomeOutlined, MailOutlined, LoginOutlined, LogoutOutlined, LoadingOutlined, UserOutlined, UserAddOutlined, WarningOutlined } from '@ant-design/icons';
 import { checkSessionId, generateSessionId } from './utils/accounts';
 
 const { Title, Text, Link } = Typography;
@@ -9,12 +9,13 @@ const { Header, Content, Footer } = Layout;
 interface LayoutProps {
     children: ReactElement | never[],
     getSessionId?: (sessionId: String) => void,
-    getUser?: () => void;
+    getUser?: (user: Object) => void;
+    title?: String,
 }
 
-const DefaultLayout = ({children, getSessionId, getUser} : LayoutProps) : ReactElement => {
+const DefaultLayout = ({children, getSessionId, getUser, title} : LayoutProps) : ReactElement => {
   
-    const title = 'ExamManager';
+    title = title || 'ExamManager';
     const [rightElements, setRightElements] = useState<ReactElement>(<LoadingOutlined className="NavbarIcon" />);
 
     useEffect(() => {
@@ -35,7 +36,7 @@ const DefaultLayout = ({children, getSessionId, getUser} : LayoutProps) : ReactE
         }
     
         checkSessionId(sessionId).then(result => {
-            if (!result.logged_in) {
+            if (result.status === 'failed') {
                 const login_menu: ReactElement = <Menu className="NavbarLoginMenu">
                     <Menu.Item key="login"><Link href="/login"><UserOutlined />Log In</Link></Menu.Item>
                     <Menu.Item key="register"><Link href="/register"><UserAddOutlined />Register</Link></Menu.Item>
@@ -49,15 +50,15 @@ const DefaultLayout = ({children, getSessionId, getUser} : LayoutProps) : ReactE
                     <Row gutter={24}
                         align='middle'>
                         <Col><Badge size="default"
-                            count={result.prompts}
-                            title={`You have ${result.prompts} unread message${((result.prompts as Number) > 1) ? 's' : ''}.`} ><MailOutlined className="NavbarIcon" /></Badge></Col>
-                        <Col><Title level={4}>{result.username}</Title></Col>
+                            count={result.user.prompts}
+                            title={`You have ${result.user.prompts} unread message${((result.user.prompts as Number) > 1) ? 's' : ''}.`} ><MailOutlined className="NavbarIcon" /></Badge></Col>
+                        <Col><Title level={4}>{result.user.username}</Title></Col>
                         <Col><Link href="/logout"
                             title="Logout"><LogoutOutlined className="NavbarIcon" /></Link></Col>
                     </Row>
                 );
                 if (getUser) {
-                    getUser(); // TODO
+                    getUser(result.user);
                 }
             }
         }).catch(err => {
@@ -74,10 +75,10 @@ const DefaultLayout = ({children, getSessionId, getUser} : LayoutProps) : ReactE
     return (<>
         <Layout>
             <Header>
-                <Row gutter={48}
+                <Row gutter={32}
                     align='middle'
                     className="Navbar">
-                    <Col><MenuOutlined className="NavbarIcon" /></Col>
+                    <Col><Link href='/'><HomeOutlined className="NavbarIcon" /></Link></Col>
                     <Col flex='auto'><Title level={3}>{title}</Title></Col>
                     <Col>{rightElements}</Col>
                 </Row>

@@ -1,16 +1,9 @@
 import stringRandom from 'string-random';
 import CryptoJS from 'crypto-js';
 
-interface Session {
-	sessionId: String;
-	logged_in: Boolean;
-	username?: String;
-	prompts?: Number;
-}
-
 const BASE_URL = 'http://localhost:3001/';
 
-async function checkSessionId(sessionId: String): Promise<Session> {
+async function checkSessionId(sessionId: String) {
     // TODO: use env variable
     /// const BASE_URL = process.env.API_BASE_URL;
     const auth = await fetch(BASE_URL + 'accounts/check?sessionId=' + sessionId)
@@ -19,17 +12,7 @@ async function checkSessionId(sessionId: String): Promise<Session> {
             return response;
         })
         .then((data) => data.json());
-    if (auth['status'] == 'failed') {
-        return { sessionId: sessionId,
-            logged_in: false };
-    } else {
-        return {
-            sessionId: sessionId,
-            logged_in: true,
-            username: auth['username'],
-            prompts: auth['prompts']
-        };
-    }
+    return auth;
 }
 
 function generateSessionId(): String {

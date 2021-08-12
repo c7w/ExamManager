@@ -1,4 +1,4 @@
-from DataManager.models.schemas import CreateUserField
+from DataManager.models.schemas import CreateUserField, LoginUserField
 from DataManager.models.accounts import auth_user, check_session, create_user, expire_session, get_user, register_user
 from fastapi import FastAPI, Cookie
 from DataManager import database as db
@@ -37,8 +37,8 @@ async def expire_sessionId(sessionId: str, db: db.SessionLocal = Depends(get_dat
     return expire_session(db, sessionId)
 
 @app.post("/accounts/login")
-async def auth_sessionId(sessionId: str, user_id: int, password: str, db: db.SessionLocal = Depends(get_database)):
-    return auth_user(db, sessionId,user_id, password)
+async def auth_sessionId(data: LoginUserField, db: db.SessionLocal = Depends(get_database)):
+    return auth_user(db, data.sessionId,data.user_id, data.password)
 
 @app.post("/accounts/register")
 async def register(data: CreateUserField, db: db.SessionLocal = Depends(get_database)):

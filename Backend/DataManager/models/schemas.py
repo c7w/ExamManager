@@ -7,4 +7,8 @@ class CreateUserField(BaseModel):
     username: Optional[str]
     password: str
     sessionId: str
-    
+
+class LoginUserField(BaseModel):
+    user_id: int
+    password: str
+    sessionId: str

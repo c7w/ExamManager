@@ -7,10 +7,12 @@ const { Title, Text, Link } = Typography;
 const { Header, Content, Footer } = Layout;
 
 interface LayoutProps {
-  children: ReactElement | never[],
+    children: ReactElement | never[],
+    getSessionId?: (sessionId: String) => void,
+    getUser?: () => void;
 }
 
-const DefaultLayout = ({children} : LayoutProps) : ReactElement => {
+const DefaultLayout = ({children, getSessionId, getUser} : LayoutProps) : ReactElement => {
   
     const title = 'ExamManager';
     const [rightElements, setRightElements] = useState<ReactElement>(<LoadingOutlined className="NavbarIcon" />);
@@ -27,6 +29,9 @@ const DefaultLayout = ({children} : LayoutProps) : ReactElement => {
             // Generate a new sessionId and write it to cookies.
             sessionId = generateSessionId();
             document.cookie = `sessionId=${sessionId}`;
+        }
+        if (getSessionId) {
+            getSessionId(sessionId);
         }
     
         checkSessionId(sessionId).then(result => {
@@ -51,15 +56,19 @@ const DefaultLayout = ({children} : LayoutProps) : ReactElement => {
                             title="Logout"><LogoutOutlined className="NavbarIcon" /></Link></Col>
                     </Row>
                 );
+                if (getUser) {
+                    getUser(); // TODO
+                }
             }
         }).catch(err => {
             setRightElements(
                 <WarningOutlined className="NavbarIcon"
                     title="Could not connect to remote API." />
             );
-            console.error(err);
+            console.error('Navbar Fetch: ' + err);
         });
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (<>
